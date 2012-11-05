@@ -15,7 +15,7 @@ namespace MonoTouch.Dialog
 		public bool ShowCaption;
 		public float Value;
 		public float MinValue, MaxValue;
-		static NSString skey = new NSString ("FloatElement");
+		static NSString skey = new NSString ("FloatCaptionElement");
 		UIImage Left, Right;
 		UISlider slider;
 
@@ -89,6 +89,9 @@ namespace MonoTouch.Dialog
 			slider.ValueChanged += delegate {
 				Value = slider.Value;
 				UpdateCell(cell, false);
+
+				var ev = ValueChanged;
+				if(ev != null) ev(this, EventArgs.Empty);
 			};
 
 			if(!cell.ContentView.Subviews.Contains(slider))
@@ -98,6 +101,8 @@ namespace MonoTouch.Dialog
 
 			return cell;
 		}
+
+		public event EventHandler ValueChanged;
 		
 		public override string Summary ()
 		{
@@ -113,7 +118,10 @@ namespace MonoTouch.Dialog
 				}
 			}
 		}		
-		
+
+		/// <summary>
+		/// Set to a number format to show the current value alongside the caption.
+		/// </summary>
 		public string NumberFormat = null;
 		
 		public string EffectiveCaption
